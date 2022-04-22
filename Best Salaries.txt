@@ -1,0 +1,27 @@
+*Best Salaries
+CLASS zcl_highest_salary DEFINITION
+PUBLIC
+FINAL
+CREATE PUBLIC.
+PUBLIC SECTION.
+TYPES: BEGIN OF ty_result,
+department TYPE CHAR50,
+employee TYPE CHAR50,
+salary TYPE I,
+END OF ty_result.
+TYPES: tt_result TYPE TABLE OF ty_result.
+METHODS: highest_salary CHANGING t_result TYPE tt_result.
+PROTECTED SECTION.
+PRIVATE SECTION.
+ENDCLASS.
+CLASS zcl_highest_salary IMPLEMENTATION.
+METHOD highest_salary.
+select a~name as department
+       b~name as employee 	
+       max(b~salary)
+into corresponding of table tt_result
+from ZTA_DEPARTMENT as a inner join ZTA_EMPLOYEE as b on a~id = b~departmentid
+group by a~name.
+REFRESH t_result.
+ENDMETHOD.
+ENDCLASS.
